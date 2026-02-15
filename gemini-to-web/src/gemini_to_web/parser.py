@@ -106,6 +106,9 @@ def parse(gemtext: str) -> abc.Generator[GemElement]:
 class TextLine:
     text: str
 
+    def __str__(self):
+        return self.text
+
 
 @dataclasses.dataclass
 class PreformattedTextLine(TextLine):
@@ -140,6 +143,11 @@ class LinkLine:
             return LinkLine(parts[0])
         return LinkLine(parts[0], parts[1])
 
+    def __str__(self):
+        if self.link_name:
+            return f"=> {self.url} {self.link_name}"
+        return f"=> {self.url}"
+
 
 @dataclasses.dataclass
 class PreformattingToggleLine:
@@ -162,6 +170,11 @@ class PreformattingToggleLine:
         line: typing.Optional[str] = line if line else None
         return PreformattingToggleLine(line)
 
+    def __str__(self):
+        if self.alt_text:
+            return f"```{self.alt_text}"
+        return "```"
+
 
 @dataclasses.dataclass
 class HeadingLine:
@@ -183,6 +196,10 @@ class HeadingLine:
             return None
         return HeadingLine(len(parts[0]), parts[1])
 
+    def __str__(self):
+        token = "#" * self.level
+        return f"{token} {self.heading_text}"
+
 
 @dataclasses.dataclass
 class ListItem:
@@ -200,6 +217,9 @@ class ListItem:
             return None
         return ListItem(line.removeprefix("* "))
 
+    def __str__(self):
+        return f"* {self.text}"
+
 
 @dataclasses.dataclass
 class QuoteLine:
@@ -216,6 +236,9 @@ class QuoteLine:
         if not line.startswith("> "):
             return None
         return QuoteLine(line.removeprefix("> "))
+
+    def __str__(self):
+        return f"> {self.text}"
 
 
 def cli_parse():
