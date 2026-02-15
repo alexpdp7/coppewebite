@@ -1,4 +1,4 @@
-import typing
+import pathlib
 
 import htmlgenerator
 from lxml import etree, html
@@ -105,6 +105,7 @@ def cli_to_html():
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument("--feed-title")
     argument_parser.add_argument("--feed-href")
+    argument_parser.add_argument("file", nargs="*")
     args = argument_parser.parse_args()
 
     assert not bool(args.feed_title) ^ bool(args.feed_href), "--feed-title and --feed-href must be both present or both absent"
@@ -113,10 +114,20 @@ def cli_to_html():
     if args.feed_href:
         extra_head.append(htmlgenerator.LINK(rel="alternate", type="application/rss+xml", title=args.feed_title, href=args.feed_href))
 
-    input_ = sys.stdin.read()
-    gemtext = parser.parse(input_)
-    gemtext = list(gemtext)
-    html = to_html(gemtext, extra_head=extra_head)
-    rendered = htmlgenerator.render(html, {})
-    rendered = pretty(rendered)
-    print(rendered)
+    def convert(input_):
+        gemtext = parser.parse(input_)
+        gemtext = list(gemtext)
+        html = to_html(gemtext, extra_head=extra_head)
+        rendered = htmlgenerator.render(html, {})
+        rendered = pretty(rendered)
+        return rendered
+
+    if not args.file:
+        input_ = sys.stdin.read()
+        rendered = convert(input_)
+        print(rendered, end="")
+    else:
+        for path in args.file:
+            input_ = pathlib.Path(path).read_text()
+            rendered = convert(input_)
+            pathlib.Path(path).with_suffix(".html").write_text(rendered)
