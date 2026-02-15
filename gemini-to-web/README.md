@@ -1,5 +1,21 @@
 # `gemini-to-web`
 
+## Installation
+
+With [uv](https://docs.astral.sh/uv/):
+
+```
+uv tool install git+https://ñix.es/cgit/alex/coppewebite.git/#subdirectory=gemini-to-web
+```
+
+With [pipx](https://pipx.pypa.io/stable/):
+
+```
+pipx install git+https://ñix.es/cgit/alex/coppewebite.git/#subdirectory=gemini-to-web
+```
+
+## Usage
+
 ```console
 $ uv run coppewebite-parse <<EOT
 > # Hello
