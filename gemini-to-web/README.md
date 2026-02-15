@@ -27,3 +27,10 @@ $ uv run coppewebite-to-html <<EOT
   </body>
 </html>
 ```
+
+`coppewebite-indexer` reads from standard input a `\0`-separated list of files (such as the output of `find -print0`).
+`coppewebite-indexer` parses all files as gemtext, extracting the first header, and matching the header text as a Gemini page subscription entry element label.
+`coppewebite-indexer` outputs a list of gemtext links, sorted in reverse chronological order, suitable for use as a Gemini page subscription.
+
+You can use `coppewebite-indexer` to create a gemlog index automatically.
+Refer to the [`example`](example) directory for an example.

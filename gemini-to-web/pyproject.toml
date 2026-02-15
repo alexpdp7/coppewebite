@@ -13,6 +13,7 @@ dependencies = [
 [project.scripts]
 coppewebite-parse = "gemini_to_web.parser:cli_parse"
 coppewebite-to-html = "gemini_to_web.html:cli_to_html"
+coppewebite-indexer = "gemini_to_web.indexer:cli_indexer"
 
 [build-system]
 requires = ["uv_build>=0.9.30,<0.10.0"]
