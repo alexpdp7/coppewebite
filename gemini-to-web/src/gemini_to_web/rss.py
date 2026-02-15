@@ -13,20 +13,28 @@ from gemini_to_web import parser
 
 def cli_to_rss():
     argument_parser = argparse.ArgumentParser()
-    argument_parser.add_argument("--title", default="")
+    argument_parser.add_argument("--title", default=None)
     argument_parser.add_argument("--subtitle", default=None)
-    argument_parser.add_argument("--base-url", default="")
+    argument_parser.add_argument("base_url")
     argument_parser.add_argument("base_dir", type=pathlib.Path)
     args = argument_parser.parse_args()
-
-    fg = feed.FeedGenerator()
-    fg.title(args.title)
-    fg.subtitle(args.subtitle)
-    fg.link(href=args.base_url, rel="self")
 
     input_ = sys.stdin.read()
     parsed = parser.parse(input_)
     parsed = list(parsed)
+
+    title = args.title
+    if not title:
+        title = [p for p in parsed if isinstance(p, parser.HeadingLine) and p.level == 1][0].heading_text
+
+    subtitle = args.subtitle
+    if not subtitle:
+        subtitle = [p for p in parsed if isinstance(p, parser.HeadingLine) and p.level == 2][0].heading_text
+
+    fg = feed.FeedGenerator()
+    fg.title(title)
+    fg.subtitle(subtitle)
+    fg.link(href=args.base_url, rel="self")
 
     entries = []
     for element in parsed:

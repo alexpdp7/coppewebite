@@ -19,12 +19,14 @@ cp -r source/* target/
     cat <<HEAD
 # Welcome to my blog
 
+## Subtitle
+
 HEAD
     find . -path './source/2???/??/*.gmi' -type f -print0 | uv --project .. run coppewebite-indexer source/
 } >target/index.gmi
 
 # Generate an RSS feed.
-uv --project .. run coppewebite-to-rss <target/index.gmi >target/index.rss --title Example --subtitle Subtitle --base-url https://www.example.com target/
+uv --project .. run coppewebite-to-rss <target/index.gmi >target/index.rss https://www.example.com target/
 
 # Convert all gemtext to HTML.
 find target -name '*.gmi' -exec sh -c 'uv --project .. run coppewebite-to-html <{} >$(echo {} | sed s/.gmi/.html/)' ';'
