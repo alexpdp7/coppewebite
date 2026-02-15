@@ -33,4 +33,7 @@ $ uv run coppewebite-to-html <<EOT
 `coppewebite-indexer` outputs a list of gemtext links, sorted in reverse chronological order, suitable for use as a Gemini page subscription.
 
 You can use `coppewebite-indexer` to create a gemlog index automatically.
+
+`coppewebite-to-rss` reads from standard input a gemtext file and produces the equivalent RSS to the gemtext subscription.
+
 Refer to the [`example`](example) directory for an example.

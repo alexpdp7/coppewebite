@@ -6,6 +6,7 @@ authors = [
 ]
 requires-python = ">=3.12"
 dependencies = [
+    "feedgen>=1.0.0",
     "htmlgenerator>=1.2.32",
     "lxml>=6.0.2",
 ]
@@ -14,6 +15,7 @@ dependencies = [
 coppewebite-parse = "gemini_to_web.parser:cli_parse"
 coppewebite-to-html = "gemini_to_web.html:cli_to_html"
 coppewebite-indexer = "gemini_to_web.indexer:cli_indexer"
+coppewebite-to-rss = "gemini_to_web.rss:cli_to_rss"
 
 [build-system]
 requires = ["uv_build>=0.9.30,<0.10.0"]
