@@ -12,7 +12,7 @@ def first_header_title_extractor(parsed: list[parser.GemElement]):
         return heading_lines[0].heading_text
 
 
-def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_extractor):
+def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_extractor, extra_head=None):
     body = []
     building_element = None
     building_content = None
@@ -26,6 +26,9 @@ def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_
 
     if title_extractor:
        head.append(htmlgenerator.TITLE(title_extractor(parsed)))
+
+    if extra_head:
+        head += extra_head
 
     for item in parsed:
         match item:
@@ -96,11 +99,24 @@ def pretty(s):
 
 
 def cli_to_html():
+    import argparse
     import sys
+
+    argument_parser = argparse.ArgumentParser()
+    argument_parser.add_argument("--feed-title")
+    argument_parser.add_argument("--feed-href")
+    args = argument_parser.parse_args()
+
+    assert not bool(args.feed_title) ^ bool(args.feed_href), "--feed-title and --feed-href must be both present or both absent"
+
+    extra_head = []
+    if args.feed_href:
+        extra_head.append(htmlgenerator.LINK(rel="alternate", type="application/rss+xml", title=args.feed_title, href=args.feed_href))
+
     input_ = sys.stdin.read()
     gemtext = parser.parse(input_)
     gemtext = list(gemtext)
-    html = to_html(gemtext)
+    html = to_html(gemtext, extra_head=extra_head)
     rendered = htmlgenerator.render(html, {})
     rendered = pretty(rendered)
     print(rendered)
