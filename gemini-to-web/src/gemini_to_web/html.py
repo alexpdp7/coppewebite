@@ -25,7 +25,9 @@ def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_
     head = []
 
     if title_extractor:
-       head.append(htmlgenerator.TITLE(title_extractor(parsed)))
+        title = title_extractor(parsed)
+        if title:
+            head.append(htmlgenerator.TITLE())
 
     if extra_head:
         head += extra_head
