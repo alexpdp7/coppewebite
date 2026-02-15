@@ -101,11 +101,13 @@ def pretty(s):
 def cli_to_html():
     import argparse
     import sys
+    import textwrap
 
     argument_parser = argparse.ArgumentParser()
     argument_parser.add_argument("--feed-title")
     argument_parser.add_argument("--feed-href")
     argument_parser.add_argument("file", nargs="*")
+    argument_parser.add_argument("--css", type=pathlib.Path)
     args = argument_parser.parse_args()
 
     assert not bool(args.feed_title) ^ bool(args.feed_href), "--feed-title and --feed-href must be both present or both absent"
@@ -113,6 +115,9 @@ def cli_to_html():
     extra_head = []
     if args.feed_href:
         extra_head.append(htmlgenerator.LINK(rel="alternate", type="application/rss+xml", title=args.feed_title, href=args.feed_href))
+
+    if args.css:
+        extra_head.append(htmlgenerator.STYLE("\n" + textwrap.indent(args.css.read_text(), " "*6).rstrip() + "\n" + " "*4))
 
     def convert(input_):
         gemtext = parser.parse(input_)
