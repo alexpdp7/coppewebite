@@ -16,3 +16,5 @@ HEAD
 } >target/index.gmi
 
 uv --project .. run coppewebite-to-rss <target/index.gmi >target/index.rss --title Example --subtitle Subtitle --base-url https://www.example.com target/
+
+find target -name '*.gmi' -exec sh -c 'uv --project .. run coppewebite-to-html <{} >$(echo {} | sed s/.gmi/.html/)' ';'
