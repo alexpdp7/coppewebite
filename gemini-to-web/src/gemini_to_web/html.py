@@ -76,7 +76,7 @@ def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_
                 elif building_element is not None and building_element != htmlgenerator.P:
                     body, building_element, building_content = close(body, building_element, building_content)
                 building_element = htmlgenerator.P
-                building_content = [htmlgenerator.A(link_name, href=url)]
+                building_content = [htmlgenerator.A(link_name or url, href=url)]
             case parser.ListItem(text):
                 if building_element == htmlgenerator.UL:
                     building_content.append(htmlgenerator.LI(text))
