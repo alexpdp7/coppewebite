@@ -34,6 +34,9 @@ PrivateUsers=self
 SystemCallFilter=@system-service
 SystemCallErrorNumber=EPERM
 UMask=7777
+
+[Install]
+WantedBy=multi-user.target
 ```
 
 Systemd injects the certificates to a private path than only `proxy.py` can read.
