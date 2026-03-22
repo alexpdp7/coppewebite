@@ -59,3 +59,19 @@ Because gemtext is such a simple format, many traditional authoring techniques b
 For example, adding a header or a footer to many pages can be done by plain text file concatenation.
 
 `gemini-to-web` includes an indexer that can generate a reverse-chronological list of articles automatically to simplify maintenance of a blog-like site.
+
+## Creating aggregators
+
+This repo contains a few scripts that can help you work with Gemini subscriptions.
+
+```
+#!/bin/sh
+
+echo "# Feeds"
+echo
+
+{
+    python3 gemget.py gemini://aperalesf.flounder.online/gemlog | python3 parse-feed.py gemini://aperalesf.flounder.online/gemlog "Gemlog de Adrián Perales"
+    python3 gemget.py gemini://alex.corcoles.net | python3 parse-feed.py gemini://alex.corcoles.net "El blog es mío"
+} | sort -r | head -20 | python3 reparse-feed.py
+```
