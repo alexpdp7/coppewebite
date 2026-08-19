@@ -22,17 +22,18 @@ class Handler(socketserver.BaseRequestHandler):
             assert absolute_uri.startswith("gemini://"), f"Request for uri {absolute_uri} does not start with gemini://"
             logging.info(absolute_uri)
             absolute_uri = urllib.parse.urlparse(absolute_uri)
-            host = absolute_uri.netloc
+            host = absolute_uri.hostname
 
             global proxied_hosts
             assert host in proxied_hosts, f"{host} not in {proxied_hosts}"
-            request = urllib.request.Request(absolute_uri._replace(scheme="https").geturl(), headers={"Host": host})
+            request = urllib.request.Request(absolute_uri._replace(scheme="https", netloc=host).geturl(), headers={"Host": host})
             request.add_header("Accept", "text/gemini")
             with urllib.request.urlopen(request) as f:
                 content = f.read().decode("UTF8")
             response = "20 text/gemini\r\n"
             response += content
 
+            logging.info("sending response")
             sock.sendall(response.encode("UTF8"))
             sock.unwrap()
 
