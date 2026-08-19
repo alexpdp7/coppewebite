@@ -34,7 +34,7 @@ class Handler(socketserver.BaseRequestHandler):
             response += content
 
             sock.sendall(response.encode("UTF8"))
-
+            sock.unwrap()
 
 def main():
     logging.basicConfig(level=logging.DEBUG, format="%(asctime)s %(message)s")
