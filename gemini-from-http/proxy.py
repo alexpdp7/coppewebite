@@ -70,8 +70,8 @@ def main():
     global proxied_hosts
     proxied_hosts = args.proxied_host
 
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer((args.host, args.port), Handler) as server:
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    with socketserver.ThreadingTCPServer((args.host, args.port), Handler) as server:
         server.serve_forever()
 
 
