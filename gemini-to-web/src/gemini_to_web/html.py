@@ -97,7 +97,7 @@ def to_html(parsed: list[parser.GemElement], title_extractor=first_header_title_
 
 
 def pretty(s):
-    return etree.tostring(html.fromstring(s), pretty_print=True).decode("utf8")
+    return etree.tostring(html.fromstring(s), pretty_print=True, doctype="<!DOCTYPE html>").decode("utf8")
 
 
 def cli_to_html():
